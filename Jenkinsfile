@@ -44,31 +44,29 @@ pipeline {
                     
                     CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
                     GENAI_VISITS_SERVICES = genai_visits.join(",")
-
-                    echo "Changes in Customers & Vets: ${CUSTOMERS_VETS_SERVICES}"
-                    echo "Changes in GenAI & Visits: ${GENAI_VISITS_SERVICES}"
                 }
             }
         }
 
-        // stage('Build if Customers & GenAI are changed') {
-        //     when {
-        //         expression { return env.CUSTOMERS_VETS_SERVICES != '' }
-        //     }
-        //     //agent { label 'ptb-agent' }
-        //     steps {
-        //         script {
-        //             def services = env.CUSTOMERS_VETS_SERVICES.split(",")
+        stage('Build if Customers & GenAI are changed') {
+            when {
+                expression { return env.CUSTOMERS_VETS_SERVICES != '' }
+            }
+            //agent { label 'ptb-agent' }
+            steps {
+                script {
+                    // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
 
-        //             for (service in services) {
-        //                 echo "Building ${service}........"
-        //                 dir("${service}") {
-        //                     sh "./mvnw clean package"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+                    // for (service in services) {
+                    //     echo "Building ${service}........"
+                    //     dir("${service}") {
+                    //         sh "./mvnw clean package"
+                    //     }
+                    // }
+                    sh 'cat hello.txt'
+                }
+            }
+        }
 
         // stage('Test if Customers & GenAI are changed') {
         //     when {
