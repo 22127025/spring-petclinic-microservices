@@ -63,7 +63,7 @@ pipeline {
                     //         sh "./mvnw clean package"
                     //     }
                     // }
-                    sh 'cat spring-petclinic-vets-service/hello.txt'
+                    sh 'mvn test -f spring-petclinic-vets-service'
                 }
             }
         }
