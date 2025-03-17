@@ -23,8 +23,8 @@ pipeline {
     agent none
 
     environment {
-        CUSTOMERS_GENAI_SERVICES = ''
-        VETS_VISITS_SERVICES = ''
+        CUSTOMERS_VETS_SERVICES = ''
+        GENAI_VISITS_SERVICES = ''
     }
 
     stages {
