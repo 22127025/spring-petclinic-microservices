@@ -48,9 +48,11 @@ pipeline {
                     CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
                     GENAI_VISITS_SERVICES = genai_visits.join(",")
 
-                    echo "CUSTOMERS_VETS_SERVICES: ${env.CUSTOMERS_VETS_SERVICES}"
-                    echo "GENAI_VISITS_SERVICES: ${env.GENAI_VISITS_SERVICES}"
+                    //echo "CUSTOMERS_VETS_SERVICES: ${env.CUSTOMERS_VETS_SERVICES}"
+                    //echo "GENAI_VISITS_SERVICES: ${env.GENAI_VISITS_SERVICES}"
                 }
+                echo "CUSTOMERS_VETS_SERVICES: ${env.CUSTOMERS_VETS_SERVICES}"
+                echo "GENAI_VISITS_SERVICES: ${env.GENAI_VISITS_SERVICES}"
             }
         }
 
