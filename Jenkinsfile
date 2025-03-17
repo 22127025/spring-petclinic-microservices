@@ -13,6 +13,8 @@ pipeline {
                     if (changes.any { it.startsWith("genai-service/") }) { SERVICES_CHANGED.add('genai-service') }
                     if (changes.any { it.startsWith("vets-service/") }) { SERVICES_CHANGED.add('vets-service') }
                     if (changes.any { it.startsWith("visits-service/") }) { SERVICES_CHANGED.add('visits-service') }
+
+                    echo "${SERVICES_CHANGED[0]}"
                 }
             }
         }
