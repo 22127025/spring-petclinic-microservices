@@ -27,8 +27,24 @@ pipeline {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
                         echo "Building ${service}........"
-                        sh "./mvnw install -f spring-petclinic-${service}"
+                        sh "./mvnw package -f spring-petclinic-${service}"
+                    }    
+                }
+            }
+        }
+
+        stage('Test if Customers & Vets are changed. Upload test results and testcase coverage') {
+            when {
+                expression { return CUSTOMERS_VETS_SERVICES.size() > 0 }
+            }
+            agent { label 'ptb-agent' }
+            steps {
+                script {
+                    for (service in CUSTOMERS_VETS_SERVICES) {
+                        echo "Testing ${service}........"
+                        sh "./mvnw test -f spring-petclinic-${service}"
                         junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                        jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java'
                     }    
                 }
             }
