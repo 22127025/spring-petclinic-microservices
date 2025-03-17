@@ -41,6 +41,9 @@ pipeline {
                     if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { customers_vets.add('vets-service') }
                     if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { genai_visits.add('genai-service') }
                     if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { genai_visits.add('visits-service') }
+
+                    echo "Customer_vet: ${customers_vets}"
+                    echo "Genai_visits: ${genai_visits}"
                     
                     env.CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
                     env.GENAI_VISITS_SERVICES = genai_visits.join(",")
