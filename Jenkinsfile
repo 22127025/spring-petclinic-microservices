@@ -63,7 +63,7 @@ pipeline {
                 //         junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
                 //     }    
                 // }
-                sh "./mvnw install -f spring-petclinic-vets-service"
+                bat "./mvnw install -f spring-petclinic-vets-service"
                 junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
             }
         }
