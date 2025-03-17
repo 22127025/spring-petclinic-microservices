@@ -48,35 +48,14 @@ pipeline {
             }
         }
 
-        // stage('Build if Customers & GenAI are changed') {
-        //     when {
-        //         expression { return env.CUSTOMERS_VETS_SERVICES != '' }
-        //     }
-        //     agent { label 'ptb-agent' }
-        //     steps {
-        //         script {
-        //             // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
-
-        //             // for (service in services) {
-        //             //     echo "Building ${service}........"
-        //             //     dir("${service}") {
-        //             //         sh "./mvnw clean package"
-        //             //     }
-        //             // }
-        //             sh './mvnw test -f spring-petclinic-vets-service'
-        //             junit 'spring-petclinic-vets-service/target/surefire-reports/*.xml'
-        //         }
-        //     }
-        // }
-
-        stage('Build if Customers & GenAI are changed') {
+        stage('Build if Customers & Vets are changed') {
             when {
                 expression { return env.CUSTOMERS_VETS_SERVICES != '' }
             }
             agent { label '!master' }
             steps {
                 // script {
-                    // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
+                //     def services = env.CUSTOMERS_VETS_SERVICES.split(",")
 
                 //     for (service in services) {
                 //         echo "Building ${service}........"
@@ -84,7 +63,7 @@ pipeline {
                 //         junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
                 //     }    
                 // }
-                bat "./mvnw install -f spring-petclinic-vets-service"
+                sh "./mvnw install -f spring-petclinic-vets-service"
                 junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
             }
         }
