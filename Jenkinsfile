@@ -27,7 +27,7 @@ pipeline {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
                         echo "Building ${service}........"
-                        sh "./mvnw package -f spring-petclinic-${service}"
+                        sh "./mvnw clean package -f spring-petclinic-${service}"
                     }    
                 }
             }
@@ -50,71 +50,36 @@ pipeline {
             }
         }
 
-        // stage('Test if Customers & GenAI are changed') {
-        //     when {
-        //         expression { return env.CUSTOMERS_GENAI_SERVICES != '' }
-        //     }
-        //     agent { label 'nnh-agent || ptb-agent' }
-        //     steps {
-        //         script {
-        //             def services = env.CUSTOMERS_GENAI_SERVICES.split(",")
+        stage('Build if GenAI & Visits are changed') {
+            when {
+                expression { return GENAI_VISITS_SERVICES.size() > 0 }
+            }
+            agent { label 'ptb-agent' }
+            steps {
+                script {
+                    for (service in GENAI_VISITS_SERVICES) {
+                        echo "Building ${service}........"
+                        sh "./mvnw clean package -f spring-petclinic-${service}"
+                    }    
+                }
+            }
+        }
 
-        //             for (service in services) {
-        //                 echo "Running tests for ${service}"
-        //                 dir("${service}") {
-        //                     sh "./mvnw test"
-        //                     junit '**/target/surefire-reports/*.xml'
-        //                     jacoco execPattern: '**/target/jacoco.exec',
-        //                            classPattern: '**/target/classes',
-        //                            sourcePattern: '**/src/main/java'
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Test if Vets & Visits are changed') {
-        //     when {
-        //         expression { return env.VETS_VISITS_SERVICES != '' }
-        //     }
-        //     agent { label 'nnh-agent || ptb-agent' }
-        //     steps {
-        //         script {
-        //             def services = env.VETS_VISITS_SERVICES.split(",")
-
-        //             for (service in services) {
-        //                 echo "Running tests for ${service}"
-        //                 dir("${service}") {
-        //                     sh "./mvnw test"
-        //                     junit '**/target/surefire-reports/*.xml'
-        //                     jacoco execPattern: '**/target/jacoco.exec',
-        //                            classPattern: '**/target/classes',
-        //                            sourcePattern: '**/src/main/java'
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        
-
-        // stage('Build if Vets & Visits are changed') {
-        //     when {
-        //         expression { return env.VETS_VISITS_SERVICES != '' }
-        //     }
-        //     agent { label 'nnh-agent || ptb-agent' }
-        //     steps {
-        //         script {
-        //             def services = env.VETS_VISITS_SERVICES.split(",")
-
-        //             for (service in services) {
-        //                 echo "Building ${service}"
-        //                 dir("${service}") {
-        //                     sh "./mvnw clean package"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Test if Customers & Vets are changed. Upload test results and testcase coverage') {
+            when {
+                expression { return GENAI_VISITS_SERVICES.size() > 0 }
+            }
+            agent { label 'ptb-agent' }
+            steps {
+                script {
+                    for (service in GENAI_VISITS_SERVICES) {
+                        echo "Testing ${service}........"
+                        sh "./mvnw test -f spring-petclinic-${service}"
+                        junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                        jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java'
+                    }    
+                }
+            }
+        }
     }
 }
