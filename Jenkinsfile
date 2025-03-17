@@ -29,7 +29,7 @@ pipeline {
 
     stages {
         stage('Check Changes') {
-            agent { label 'gh' }
+            agent { label 'ptb-agent' }
             steps {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
@@ -52,7 +52,7 @@ pipeline {
             when {
                 expression { return env.CUSTOMERS_VETS_SERVICES != '' }
             }
-            agent { label 'gh' }
+            agent { label 'ptb-agent' }
             steps {
                 script {
                     // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
@@ -64,6 +64,7 @@ pipeline {
                     //     }
                     // }
                     sh './mvnw test -f spring-petclinic-vets-service'
+                    junit 'target/surefire-reports/*.xml'
                 }
             }
         }
