@@ -20,7 +20,7 @@
 // }
 
 pipeline {
-    agent none
+    agent any
 
     environment {
         CUSTOMERS_GENAI_SERVICES = ''
@@ -29,7 +29,7 @@ pipeline {
 
     stages {
         stage('Check Changes') {
-            agent { label 'ptb-agent' }
+            agent any
             steps {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
@@ -52,19 +52,16 @@ pipeline {
             when {
                 expression { return env.CUSTOMERS_VETS_SERVICES != '' }
             }
-            agent { label 'ptb-agent' }
+            agent any
             steps {
                 script {
-                    // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
+                    def services = env.CUSTOMERS_VETS_SERVICES.split(",")
 
-                    // for (service in services) {
-                    //     echo "Building ${service}........"
-                    //     dir("${service}") {
-                    //         sh "./mvnw clean package"
-                    //     }
-                    // }
-                    sh './mvnw test -f spring-petclinic-vets-service'
-                    junit 'spring-petclinic-vets-service/target/surefire-reports/*.xml'
+                    for (service in services) {
+                        echo "Building ${service}........"
+                        sh "./mvnw install -f spring-petclinic-${service}"
+                        junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                    }    
                 }
             }
         }
@@ -73,7 +70,7 @@ pipeline {
         //     when {
         //         expression { return env.CUSTOMERS_GENAI_SERVICES != '' }
         //     }
-        //     agent { label 'ptb-agent' }
+        //     agent any
         //     steps {
         //         script {
         //             def services = env.CUSTOMERS_GENAI_SERVICES.split(",")
@@ -96,7 +93,7 @@ pipeline {
         //     when {
         //         expression { return env.VETS_VISITS_SERVICES != '' }
         //     }
-        //     agent { label 'nnh-agent' }
+        //     agent any
         //     steps {
         //         script {
         //             def services = env.VETS_VISITS_SERVICES.split(",")
@@ -121,7 +118,7 @@ pipeline {
         //     when {
         //         expression { return env.VETS_VISITS_SERVICES != '' }
         //     }
-        //     agent { label 'nnh-agent' }
+        //     agent any
         //     steps {
         //         script {
         //             def services = env.VETS_VISITS_SERVICES.split(",")
