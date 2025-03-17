@@ -77,25 +77,25 @@ pipeline {
             }
         }
 
-        // stage('Build if Customers & Vets are changed') {
-        //     when {
-        //         expression { return env.CUSTOMERS_VETS_SERVICES != '' }
-        //     }
-        //     agent { label 'ptb-agent' }
-        //     steps {
-        //         script {
-        //             def services = env.CUSTOMERS_VETS_SERVICES.split(",")
+        stage('Build if Customers & Vets are changed') {
+            when {
+                expression { return env.CUSTOMERS_VETS_SERVICES != '' }
+            }
+            agent { label 'ptb-agent' }
+            steps {
+                script {
+                    def services = env.CUSTOMERS_VETS_SERVICES.split(",")
 
-        //             for (service in services) {
-        //                 echo "Building ${service}........"
-        //                 sh "./mvnw install -f spring-petclinic-${service}"
-        //                 junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
-        //             }    
-        //         }
-        //         //sh "./mvnw install -f spring-petclinic-vets-service"
-        //         //junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
-        //     }
-        // }
+                    for (service in services) {
+                        echo "Building ${service}........"
+                        sh "./mvnw install -f spring-petclinic-${service}"
+                        junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                    }    
+                }
+                //sh "./mvnw install -f spring-petclinic-vets-service"
+                //junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
+            }
+        }
 
         // stage('Test if Customers & GenAI are changed') {
         //     when {
