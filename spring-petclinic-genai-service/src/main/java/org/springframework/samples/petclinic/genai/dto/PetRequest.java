@@ -25,7 +25,7 @@ import java.util.Date;
  * @author Oded Shopen
  */
 public record PetRequest(int id,
-                  @JsonFormat(pattern = "yyyy-MM-dd")
+                  @JsonFormat(pattern = "yyyy-dd-MM")
                   Date birthDate,
                   String name,
                   int typeId
