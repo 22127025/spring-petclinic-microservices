@@ -37,7 +37,7 @@ pipeline {
             when {
                 expression { return CUSTOMERS_VETS_SERVICES.size() > 0 }
             }
-            agent { label 'ptb-agent' }
+            agent { label 'nnh-agent' }
             steps {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
