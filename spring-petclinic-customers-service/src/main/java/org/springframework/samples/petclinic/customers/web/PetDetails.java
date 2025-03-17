@@ -33,7 +33,7 @@ record PetDetails(
 
     String owner,
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-dd-MM")
     Date birthDate,
 
     PetType type
