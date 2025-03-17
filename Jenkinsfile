@@ -5,7 +5,7 @@ pipeline {
     agent none
     stages {
         stage('Check Changes') {
-            agent { label 'ptb-agent' }
+            agent { label 'nnh-agent' }
             steps {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
@@ -22,7 +22,7 @@ pipeline {
             when {
                 expression { return CUSTOMERS_VETS_SERVICES.size() > 0 }
             }
-            agent { label 'ptb-agent' }
+            agent { label 'nnh-agent' }
             steps {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
@@ -37,7 +37,7 @@ pipeline {
             when {
                 expression { return CUSTOMERS_VETS_SERVICES.size() > 0 }
             }
-            agent { label 'ptb-agent' }
+            agent { label 'nnh-agent' }
             steps {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
