@@ -22,7 +22,7 @@ pipeline {
             when {
                 expression { return CUSTOMERS_VETS_SERVICES.size() > 0 }
             }
-            agent { label 'nnh-agent' }
+            agent { label 'ptb-agent' }
             steps {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
@@ -37,7 +37,7 @@ pipeline {
             when {
                 expression { return CUSTOMERS_VETS_SERVICES.size() > 0 }
             }
-            agent { label 'nnh-agent' }
+            agent { label 'ptb-agent' }
             steps {
                 script {
                     for (service in CUSTOMERS_VETS_SERVICES) {
@@ -65,7 +65,7 @@ pipeline {
             }
         }
 
-        stage('Test if Customers & Vets are changed. Upload test results and testcase coverage') {
+        stage('Test if GenAI & Visits are changed. Upload test results and testcase coverage') {
             when {
                 expression { return GENAI_VISITS_SERVICES.size() > 0 }
             }
