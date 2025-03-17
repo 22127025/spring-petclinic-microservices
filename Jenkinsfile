@@ -55,25 +55,23 @@ pipeline {
                     if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { GENAI_VISITS_SERVICES.add('genai-service') }
                     if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { GENAI_VISITS_SERVICES.add('visits-service') }
                 }
-                echo "CUSTOMERS_VETS_SERVICES set to: ${CUSTOMERS_VETS_SERVICES}"
             }
         }
 
         stage('Build if Customers & Vets are changed') {
-            when {
-                expression { return env.CUSTOMERS_VETS_SERVICES != '' }
-            }
+            // when {
+            //     expression { return env.CUSTOMERS_VETS_SERVICES != '' }
+            // }
             agent { label 'ptb-agent' }
             steps {
                 script {
-                    echo "CUSTOMERS_VETS_SERVICES set to: ${CUSTOMERS_VETS_SERVICES}"
-                    // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
+                    //echo "CUSTOMERS_VETS_SERVICES set to: ${CUSTOMERS_VETS_SERVICES}"
 
-                    // for (service in services) {
-                    //     echo "Building ${service}........"
-                    //     sh "./mvnw install -f spring-petclinic-${service}"
-                    //     junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
-                    // }    
+                    for (service in CUSTOMERS_VETS_SERVICES) {
+                        echo "Building ${service}........"
+                        sh "./mvnw install -f spring-petclinic-${service}"
+                        junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                    }    
                 }
                 //sh "./mvnw install -f spring-petclinic-vets-service"
                 //junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
