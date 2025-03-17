@@ -42,8 +42,8 @@ pipeline {
                     if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { genai_visits.add('genai-service') }
                     if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { genai_visits.add('visits-service') }
                     
-                    CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
-                    GENAI_VISITS_SERVICES = genai_visits.join(",")
+                    env.CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
+                    env.GENAI_VISITS_SERVICES = genai_visits.join(",")
                 }
             }
         }
