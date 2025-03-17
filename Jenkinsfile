@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Build if Customers & GenAI are changed') {
+        stage('Build if Customers & Vets are changed') {
             when {
                 expression { return env.CUSTOMERS_VETS_SERVICES != '' }
             }
