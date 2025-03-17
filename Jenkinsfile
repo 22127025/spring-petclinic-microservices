@@ -47,6 +47,7 @@ pipeline {
                         echo "GENAI_VISITS_SERVICES set to: ${env.GENAI_VISITS_SERVICES}"
                     }
                 }
+                echo "CUSTOMERS_VETS_SERVICES set to: ${env.CUSTOMERS_VETS_SERVICES}"
             }
         }
 
