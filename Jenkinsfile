@@ -64,7 +64,7 @@ pipeline {
                     //     }
                     // }
                     sh './mvnw test -f spring-petclinic-vets-service'
-                    junit 'target/surefire-reports/*.xml'
+                    junit 'spring-petclinic-vets-service/target/surefire-reports/*.xml'
                 }
             }
         }
