@@ -29,7 +29,7 @@ pipeline {
 
     stages {
         stage('Check Changes') {
-            agent { label 'nnh-agent || ptb-agent' }
+            agent { label 'ptb-agent' }
             steps {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
