@@ -66,8 +66,7 @@ pipeline {
             agent { label 'ptb-agent' }
             steps {
                 script {
-                    echo "CUSTOMERS_VETS_SERVICES set to: ${env.CUSTOMERS_VETS_SERVICES}"
-                    echo "GENAI_VISITS_SERVICES set to: ${env.GENAI_VISITS_SERVICES}"
+                    echo "CUSTOMERS_VETS_SERVICES set to: ${CUSTOMERS_VETS_SERVICES}"
                     // def services = env.CUSTOMERS_VETS_SERVICES.split(",")
 
                     // for (service in services) {
