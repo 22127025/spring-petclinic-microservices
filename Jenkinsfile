@@ -82,7 +82,7 @@ pipeline {
                     sh "./mvnw clean package -f spring-petclinic-${GENAI_SERVICES[0]}"
                     echo "Testing ${GENAI_SERVICES[0]}........"
                     sh "./mvnw test -f spring-petclinic-${GENAI_SERVICES[0]}"
-                    junit "spring-petclinic-${GENAI_SERVICES[0]}/target/surefire-reports/*.xml"
+                    // junit "spring-petclinic-${GENAI_SERVICES[0]}/target/surefire-reports/*.xml"
                     jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java'
                 }
             }
