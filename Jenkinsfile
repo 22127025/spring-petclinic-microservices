@@ -22,9 +22,41 @@
 pipeline {
     agent none
 
+    // environment {
+    //     CUSTOMERS_VETS_SERVICES = ''
+    //     GENAI_VISITS_SERVICES = ''
+    // }
+
+    // stages {
+    //     stage('Check Changes') {
+    //         agent { label 'ptb-agent' }
+    //         steps {
+    //             script {
+    //                 def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
+
+    //                 def customers_vets = []
+    //                 def genai_visits = []
+
+    //                 if (changes.any { it.startsWith("spring-petclinic-customers-service/") }) { customers_vets.add('customers-service') }
+    //                 if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { customers_vets.add('vets-service') }
+    //                 if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { genai_visits.add('genai-service') }
+    //                 if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { genai_visits.add('visits-service') }
+
+    //                 echo "Customer_vet: ${customers_vets}"
+    //                 echo "Genai_visits: ${genai_visits}"
+                    
+    //                 CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
+    //                 GENAI_VISITS_SERVICES = genai_visits.join(",")
+
+    //                 echo "CUSTOMERS_VETS_SERVICES: ${env.CUSTOMERS_VETS_SERVICES}"
+    //                 echo "GENAI_VISITS_SERVICES: ${env.GENAI_VISITS_SERVICES}"
+    //             }
+    //         }
+    //     }
+
     environment {
-        CUSTOMERS_VETS_SERVICES = ''
-        GENAI_VISITS_SERVICES = ''
+        CUSTOMERS_VETS_SERVICES = []
+        GENAI_VISITS_SERVICES = []
     }
 
     stages {
@@ -34,47 +66,36 @@ pipeline {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
 
-                    def customers_vets = []
-                    def genai_visits = []
+                    if (changes.any { it.startsWith("spring-petclinic-customers-service/") }) { env.CUSTOMERS_VETS_SERVICES.add('customers-service') }
+                    if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { env.CUSTOMERS_VETS_SERVICES.add('vets-service') }
+                    if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { env.GENAI_VISITS_SERVICES.add('genai-service') }
+                    if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { env.GENAI_VISITS_SERVICES.add('visits-service') }
 
-                    if (changes.any { it.startsWith("spring-petclinic-customers-service/") }) { customers_vets.add('customers-service') }
-                    if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { customers_vets.add('vets-service') }
-                    if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { genai_visits.add('genai-service') }
-                    if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { genai_visits.add('visits-service') }
-
-                    echo "Customer_vet: ${customers_vets}"
-                    echo "Genai_visits: ${genai_visits}"
-                    
-                    CUSTOMERS_VETS_SERVICES = customers_vets.join(",")
-                    GENAI_VISITS_SERVICES = genai_visits.join(",")
-
-                    //echo "CUSTOMERS_VETS_SERVICES: ${env.CUSTOMERS_VETS_SERVICES}"
-                    //echo "GENAI_VISITS_SERVICES: ${env.GENAI_VISITS_SERVICES}"
+                    echo "Customer_vet: ${env.CUSTOMERS_VETS_SERVICES}"
+                    echo "Genai_visits: ${env.GENAI_VISITS_SERVICES}"
                 }
-                echo "CUSTOMERS_VETS_SERVICES: ${env.CUSTOMERS_VETS_SERVICES}"
-                echo "GENAI_VISITS_SERVICES: ${env.GENAI_VISITS_SERVICES}"
             }
         }
 
-        stage('Build if Customers & Vets are changed') {
-            when {
-                expression { return env.CUSTOMERS_VETS_SERVICES != '' }
-            }
-            agent { label 'ptb-agent' }
-            steps {
-                script {
-                    def services = env.CUSTOMERS_VETS_SERVICES.split(",")
+        // stage('Build if Customers & Vets are changed') {
+        //     when {
+        //         expression { return env.CUSTOMERS_VETS_SERVICES != '' }
+        //     }
+        //     agent { label 'ptb-agent' }
+        //     steps {
+        //         script {
+        //             def services = env.CUSTOMERS_VETS_SERVICES.split(",")
 
-                    for (service in services) {
-                        echo "Building ${service}........"
-                        sh "./mvnw install -f spring-petclinic-${service}"
-                        junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
-                    }    
-                }
-                //sh "./mvnw install -f spring-petclinic-vets-service"
-                //junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
-            }
-        }
+        //             for (service in services) {
+        //                 echo "Building ${service}........"
+        //                 sh "./mvnw install -f spring-petclinic-${service}"
+        //                 junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+        //             }    
+        //         }
+        //         //sh "./mvnw install -f spring-petclinic-vets-service"
+        //         //junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
+        //     }
+        // }
 
         // stage('Test if Customers & GenAI are changed') {
         //     when {
