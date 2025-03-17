@@ -59,8 +59,8 @@ pipeline {
 
                     for (service in services) {
                         echo "Building ${service}........"
-                        sh "./mvnw install -f spring-petclinic-${service}"
-                        junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                        sh "./mvnw install -f spring-petclinic-vets-service"
+                        junit "spring-petclinic-vets-service/target/surefire-reports/*.xml"
                     }    
                 }
             }
