@@ -81,11 +81,11 @@ public class Vet {
     }
 
     public String getFirstName() {
-        return this.firstName;
+        return this.lastName;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return this.firstName;
     }
 
     public void setId(Integer id) {
