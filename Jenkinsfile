@@ -46,9 +46,9 @@ pipeline {
                         sh "./mvnw test -f spring-petclinic-${service}"
                         if (service != 'genai-service') {
                             junit "spring-petclinic-${service}/target/surefire-reports/*.xml"
+                            jacoco execPattern: "spring-petclinic-${service}/target/jacoco.exec", classPattern: "spring-petclinic-${service}/target/classes", sourcePattern: "spring-petclinic-${service}/src/main/java"
                         }
                         // jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java'
-                        jacoco execPattern: "spring-petclinic-${service}/target/jacoco.exec", classPattern: "spring-petclinic-${service}/target/classes", sourcePattern: "spring-petclinic-${service}/src/main/java"
                     }
                 }
             }
