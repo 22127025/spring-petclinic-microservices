@@ -8,13 +8,11 @@ pipeline {
             steps {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
-            
+
                     if (changes.any { it.startsWith("spring-petclinic-customers-service/") }) { SERVICES_CHANGED.add('customers-service') }
                     if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { SERVICES_CHANGED.add('vets-service') }
                     if (changes.any { it.startsWith("spring-petclinic-genai-service/") }) { SERVICES_CHANGED.add('genai-service') }
                     if (changes.any { it.startsWith("spring-petclinic-visits-service/") }) { SERVICES_CHANGED.add('visits-service') }
-
-                    echo "${SERVICES_CHANGED}"
                 }
             }
         }
@@ -53,5 +51,22 @@ pipeline {
                 }
             }
         }
+
+        // stage('Build and push image to Docker Hub') {
+        //     when {
+        //         expression { return SERVICES_CHANGED.size() > 0}
+        //     }
+        //     agent { label 'ptb-agent || nnh-agent' }
+        //     steps {
+        //         script {
+        //             for (service in SERVICES_CHANGED) {
+        //                 echo "Building and pushing image for ${service}....."
+        //                 sh "docker build -t spring-petclinic-${service}:latest spring-petclinic-${service}"
+        //                 sh "docker tag spring-petclinic-${service}:latest <your-dockerhub-username>/spring-petclinic-${service}:latest"
+        //                 sh "docker push <your-dockerhub-username>/spring-petclinic-${service}:latest"
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
