@@ -60,12 +60,16 @@ pipeline {
             }
             agent { label 'ptb-agent || nnh-agent' }
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
-                    script {
-                        for (service in SERVICES_CHANGED) {
-                            echo "Building and pushing image for ${service}....."
-                            sh "./mvnw clean install -P buildDocker -f spring-petclinic-${service}"
-                            sh "docker tag 22127025/devops-project2/spring-petclinic-${service}:latest 22127025/devops-project2:${COMMIT_ID}"
+                script {
+                    for (service in SERVICES_CHANGED) {
+                        echo "Building image for ${service}....."
+                        sh "./mvnw clean install -P buildDocker -f spring-petclinic-${service}"
+
+                        echo "Retag image for ${service}....."
+                        sh "docker tag 22127025/devops-project2/spring-petclinic-${service}:latest 22127025/devops-project2:${COMMIT_ID}"
+
+                        echo "Pushing image to DockerHub for ${service}....."
+                        withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
                             sh "docker push 22127025/devops-project2:${COMMIT_ID}"
                         }
                     }
