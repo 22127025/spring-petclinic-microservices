@@ -1,4 +1,5 @@
 def SERVICES_CHANGED = []
+def COMMIT_ID
 
 pipeline {
     agent none
@@ -8,6 +9,8 @@ pipeline {
             steps {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
+                    COMMIT_ID = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    echo "Commit ID: ${COMMIT_ID}"
 
                     if (changes.any { it.startsWith("spring-petclinic-customers-service/") }) { SERVICES_CHANGED.add('customers-service') }
                     if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { SERVICES_CHANGED.add('vets-service') }
@@ -58,12 +61,14 @@ pipeline {
         //     }
         //     agent { label 'ptb-agent || nnh-agent' }
         //     steps {
-        //         script {
-        //             for (service in SERVICES_CHANGED) {
-        //                 echo "Building and pushing image for ${service}....."
-        //                 sh "docker build -t spring-petclinic-${service}:latest spring-petclinic-${service}"
-        //                 sh "docker tag spring-petclinic-${service}:latest <your-dockerhub-username>/spring-petclinic-${service}:latest"
-        //                 sh "docker push <your-dockerhub-username>/spring-petclinic-${service}:latest"
+        //         withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
+        //             script {
+        //                 for (service in SERVICES_CHANGED) {
+        //                     echo "Building and pushing image for ${service}....."
+        //                     sh "./mvnw clean install -P buildDocker -f spring-petclinic-${service}"
+        //                     sh "docker tag 22127025/devops-project2/spring-petclinic-${service}:latest 22127025/devops-project2:${ac}"
+        //                     sh "docker push 22127025/devops-project2:${ac}"
+        //                 }
         //             }
         //         }
         //     }
