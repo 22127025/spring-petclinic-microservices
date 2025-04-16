@@ -10,7 +10,6 @@ pipeline {
                 script {
                     def changes = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim().split("\n")
                     COMMIT_ID = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                    echo "Commit ID: ${COMMIT_ID}"
 
                     if (changes.any { it.startsWith("spring-petclinic-customers-service/") }) { SERVICES_CHANGED.add('customers-service') }
                     if (changes.any { it.startsWith("spring-petclinic-vets-service/") }) { SERVICES_CHANGED.add('vets-service') }
@@ -55,23 +54,23 @@ pipeline {
             }
         }
 
-        // stage('Build and push image to Docker Hub') {
-        //     when {
-        //         expression { return SERVICES_CHANGED.size() > 0}
-        //     }
-        //     agent { label 'ptb-agent || nnh-agent' }
-        //     steps {
-        //         withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
-        //             script {
-        //                 for (service in SERVICES_CHANGED) {
-        //                     echo "Building and pushing image for ${service}....."
-        //                     sh "./mvnw clean install -P buildDocker -f spring-petclinic-${service}"
-        //                     sh "docker tag 22127025/devops-project2/spring-petclinic-${service}:latest 22127025/devops-project2:${ac}"
-        //                     sh "docker push 22127025/devops-project2:${ac}"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build and push image to Docker Hub') {
+            when {
+                expression { return SERVICES_CHANGED.size() > 0}
+            }
+            agent { label 'ptb-agent || nnh-agent' }
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
+                    script {
+                        for (service in SERVICES_CHANGED) {
+                            echo "Building and pushing image for ${service}....."
+                            sh "./mvnw clean install -P buildDocker -f spring-petclinic-${service}"
+                            sh "docker tag 22127025/devops-project2/spring-petclinic-${service}:latest 22127025/devops-project2:${COMMIT_ID}"
+                            sh "docker push 22127025/devops-project2:${COMMIT_ID}"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
