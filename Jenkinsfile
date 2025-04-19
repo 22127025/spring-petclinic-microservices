@@ -9,29 +9,25 @@ pipeline {
     }
 
     stages {
-        stage('Print Branch Name') {
-            steps {
-                echo "Building branch: ${params.BRANCH_NAME}"
-            }
-        }
-        
-        stage('Checkout') {
+        stage ('Pull Github repo') {
             agent { label 'ptb-agent || nnh-agent' }
             steps {
-                git credentialsId: 'github-token', branch: "${params.BRANCH_NAME}", url: 'https://github.com/22127025/spring-petclinic-microservices.git'
+                git branch: "${params.BRANCH_NAME}",
+                credentialsId: 'github-token',
+                url: 'https://github.com/22127025/spring-petclinic-microservices.git'
             }
         }
 
-        stage('Get Latest Commit') {
-            agent { label 'ptb-agent || nnh-agent' }
-            steps {
-                script {
-                    // Get the latest commit hash
-                    LATEST_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-                    echo "Latest Commit Hash: ${LATEST_COMMIT}"
-                }
-            }
-        }
+        // stage('Get Latest Commit') {
+        //     agent { label 'ptb-agent || nnh-agent' }
+        //     steps {
+        //         script {
+        //             // Get the latest commit hash
+        //             LATEST_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+        //             echo "Latest Commit Hash: ${LATEST_COMMIT}"
+        //         }
+        //     }
+        // }
 
         // stage('Check Changes') {
         //     agent { label 'ptb-agent || nnh-agent' }
