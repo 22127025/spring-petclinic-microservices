@@ -4,17 +4,25 @@
 pipeline {
     agent none
 
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'dev', description: 'Git branch to build')
+    environment {
+        GIT_REPO = 'https://github.com/22127025/spring-petclinic-microservices.git' // Your GitHub repository URL
+        CREDENTIALS_ID = 'github-token' // Replace with your GitHub credentials ID in Jenkins
     }
 
     stages {
-        stage ('Pull Github repo') {
+        stage('Checkout') {
             agent { label 'ptb-agent || nnh-agent' }
             steps {
-                git branch: "${params.BRANCH_NAME}",
-                credentialsId: 'github-token',
-                url: 'https://github.com/22127025/spring-petclinic-microservices.git'
+                script {
+                    // Dynamically get the branch name from the webhook payload
+                    def branchName = env.GIT_BRANCH // `GIT_BRANCH` is set automatically in Jenkins for GitHub webhook triggers
+                    echo "Branch name is: ${branchName}"
+
+                    // Checkout the branch that triggered the webhook
+                    git credentialsId: "${CREDENTIALS_ID}",
+                        url: "${GIT_REPO}",
+                        branch: branchName
+                }
             }
         }
 
