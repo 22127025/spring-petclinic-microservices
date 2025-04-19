@@ -11,7 +11,7 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/22127025/spring-petclinic-microservices.git'
         BRANCH_NAME = "${params.BRANCH_NAME}"
-        IMAGE_NAME = 'ntquan87/nodejs-app-ci-cd'
+        //IMAGE_NAME = "22127025/spring-petclinic-${params.BRANCH_NAME}"
     }
 
     stages {
