@@ -8,28 +8,12 @@ pipeline {
         string(name: 'BRANCH_NAME', defaultValue: 'dev', description: 'Git branch to build')
     }
 
-    environment {
-        REPO_URL = 'https://github.com/22127025/spring-petclinic-microservices.git'
-        BRANCH_NAME = "${params.BRANCH_NAME}"
-        //IMAGE_NAME = "22127025/spring-petclinic-${params.BRANCH_NAME}"
-    }
-
     stages {
-        stage('Print Branch Name') {
-            agent { label 'ptb-agent || nnh-agent' }
-            steps {
-                script {
-                    echo "Branch selected: ${BRANCH_NAME}"
-                }
-            }
-        }
         stage('Checkout') {
-            agent { label 'ptb-agent || nnh-agent' }
             steps {
-                script {
-                    // Checkout the specified branch
-                    sh(script:'git branch: "${BRANCH_NAME}"', url: "${REPO_URL}")
-                }
+                agent { label 'ptb-agent || nnh-agent' }
+                // Checkout the specified branch and fetch the latest commit
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/22127025/spring-petclinic-microservices.git'
             }
         }
 
