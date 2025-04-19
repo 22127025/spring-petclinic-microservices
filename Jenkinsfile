@@ -13,6 +13,16 @@ pipeline {
             }   
         }
 
+        stage('Checkout') {
+            agent { label 'ptb-agent || nnh-agent' }
+            steps {
+                script {
+                    // Checkout the code from the specified branch
+                    checkout([$class: 'GitSCM', branches: [[name: "${params.BRANCH_NAME ?: env.GIT_BRANCH}"]], userRemoteConfigs: [[url: 'https://github.com/22127025/spring-petclinic-microservices.git']]])
+                }
+            }
+        }
+
         
 
         // stage('Get Latest Commit') {
