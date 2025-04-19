@@ -10,8 +10,8 @@ pipeline {
 
     stages {
         stage('Checkout') {
+            agent { label 'ptb-agent || nnh-agent' }
             steps {
-                agent { label 'ptb-agent || nnh-agent' }
                 // Checkout the specified branch and fetch the latest commit
                 git branch: "${params.BRANCH_NAME}", url: 'https://github.com/22127025/spring-petclinic-microservices.git'
             }
