@@ -4,15 +4,34 @@
 pipeline {
     agent none
 
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: '', description: 'Git branch to build')
+    }
+
+    environment {
+        REPO_URL = 'https://github.com/22127025/spring-petclinic-microservices.git'
+        BRANCH_NAME = "${params.BRANCH_NAME ?: env.GIT_BRANCH}"
+    }
+
     stages {
-        stage('Pull Code') {
-            agent { label 'ptb-agent || nnh-agent' }
+        stage('Print Branch Name') {
             steps {
-                git branch: "${env.GIT_BRANCH}",
-                    credentialsId: 'github-token',
-                    url: 'https://github.com/22127025/spring-petclinic-microservices.git'
+                script {
+                    echo "Branch selected: ${BRANCH_NAME}"
+                }
+            }   
+        }
+
+        stage('Checkout') {
+            steps {
+                script {
+                    // Checkout the branch that has been committed
+                    git credentialsId: 'github-token', branch: "${BRANCH_NAME}", url: "${REPO_URL}"
+                }
             }
         }
+
+        
 
         // stage('Get Latest Commit') {
         //     agent { label 'ptb-agent || nnh-agent' }
