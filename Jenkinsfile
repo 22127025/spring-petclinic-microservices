@@ -9,6 +9,12 @@ pipeline {
     }
 
     stages {
+        stage('Print Branch Name') {
+            steps {
+                echo "Building branch: ${params.BRANCH_NAME}"
+            }
+        }
+        
         stage('Checkout') {
             agent { label 'ptb-agent || nnh-agent' }
             steps {
