@@ -1,5 +1,5 @@
-def SERVICES_CHANGED = []
-def COMMIT_ID
+// def SERVICES_CHANGED = []
+// def COMMIT_ID
 
 pipeline {
     agent none
@@ -12,8 +12,7 @@ pipeline {
         stage('Checkout') {
             agent { label 'ptb-agent || nnh-agent' }
             steps {
-                // Checkout the specified branch and fetch the latest commit
-                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/22127025/spring-petclinic-microservices.git'
+                git credentialsId: 'github-token', branch: "${params.BRANCH_NAME}", url: 'https://github.com/22127025/spring-petclinic-microservices.git'
             }
         }
 
