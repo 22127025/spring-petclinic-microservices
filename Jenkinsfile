@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Checkout the specified branch
-                    git branch: "${BRANCH_NAME}", url: "${REPO_URL}"
+                    sh(script:'git branch: "${BRANCH_NAME}"', url: "${REPO_URL}")
                 }
             }
         }
