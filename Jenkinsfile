@@ -15,6 +15,7 @@ pipeline {
 
     stages {
         stage('Print Branch Name') {
+            agent { label 'ptb-agent || nnh-agent' }
             steps {
                 script {
                     echo "Branch selected: ${BRANCH_NAME}"
@@ -23,6 +24,7 @@ pipeline {
         }
 
         stage('Checkout') {
+            agent { label 'ptb-agent || nnh-agent' }
             steps {
                 script {
                     // Checkout the branch that has been committed
