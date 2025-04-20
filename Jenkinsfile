@@ -1,5 +1,5 @@
-def helmValues = "/home/jenkins/ptb-agent/workspace/developer_build/app-demo/values.yaml"
-def helmChart = "/home/jenkins/ptb-agent/workspace/developer_build/app-demo/"
+def helmValues = "/home/jenkins/ptb-agent/workspace/spring-petclinic-project/test-app/values.yaml"
+def helmChart = "/home/jenkins/ptb-agent/workspace/spring-petclinic-project/test-app/"
 
 pipeline {
     agent none
@@ -70,8 +70,8 @@ pipeline {
             agent { label 'ptb-agent || nnh-agent' }
             steps {
                 script {
-                    echo "Deploy to k8s"
-                    sh "helm upgrade --install --namespace=test-${LATEST_COMMIT_ID}  --create-namespace jenkins-${LATEST_COMMIT_ID} -f $helmValues $helmChart --set image.repository=22127025/devops-project2 --set image.tag=${LATEST_COMMIT_ID}"
+                    echo "Deploying ${SERVICE} to k8s cluster....."
+                    sh "helm upgrade --install --namespace=test-${LATEST_COMMIT_ID} --create-namespace jenkins-${LATEST_COMMIT_ID} -f $helmValues $helmChart --set image.repository=22127025/devops-project2 --set image.tag=${LATEST_COMMIT_ID}"
                 }
             }
         }
