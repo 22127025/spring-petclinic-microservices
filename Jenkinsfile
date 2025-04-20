@@ -67,6 +67,7 @@ pipeline {
         }
 
         stage('Apply k8s') {
+            agent { label 'ptb-agent || nnh-agent' }
             steps {
                 script {
                     echo "Deploy to k8s"
