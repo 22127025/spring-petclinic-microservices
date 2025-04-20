@@ -48,41 +48,23 @@ pipeline {
         //     }
         // }
 
-        stage('Build and push image to Docker Hub') {
-            agent { label 'ptb-agent || nnh-agent' }
-            steps {
-                script {
-                    echo "Building image for ${SERVICE}....."
-                    sh "./mvnw clean install -P buildDocker -f spring-petclinic-${SERVICE}"
+        // stage('Build and push image to Docker Hub') {
+        //     agent { label 'ptb-agent || nnh-agent' }
+        //     steps {
+        //         script {
+        //             echo "Building image for ${SERVICE}....."
+        //             sh "./mvnw clean install -P buildDocker -f spring-petclinic-${SERVICE}"
 
-                    echo "Retag image for ${SERVICE}....."
-                    sh "docker tag 22127025/devops-project2/spring-petclinic-${SERVICE}:latest 22127025/devops-project2:${LATEST_COMMIT_ID}"
+        //             echo "Retag image for ${SERVICE}....."
+        //             sh "docker tag 22127025/devops-project2/spring-petclinic-${SERVICE}:latest 22127025/devops-project2:${LATEST_COMMIT_ID}"
 
-                    echo "Pushing image to DockerHub for ${SERVICE}....."
-                    withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
-                        sh "docker push 22127025/devops-project2:${LATEST_COMMIT_ID}"
-                    }
-                }
-            }
-        }
-
-        stage('Build and push image to Docker Hub') {
-            agent { label 'ptb-agent || nnh-agent' }
-            steps {
-                script {
-                    echo "Building image for ${SERVICE}....."
-                    sh "docker build -t"
-
-                    echo "Retag image for ${SERVICE}....."
-                    sh "docker tag 22127025/devops-project2/spring-petclinic-${SERVICE}:latest 22127025/devops-project2:${LATEST_COMMIT_ID}"
-
-                    echo "Pushing image to DockerHub for ${SERVICE}....."
-                    withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
-                        sh "docker push 22127025/devops-project2:${LATEST_COMMIT_ID}"
-                    }
-                }
-            }
-        }
+        //             echo "Pushing image to DockerHub for ${SERVICE}....."
+        //             withDockerRegistry(credentialsId: 'dockerhub-token', url: 'https://index.docker.io/v1/') {
+        //                 sh "docker push 22127025/devops-project2:${LATEST_COMMIT_ID}"
+        //             }
+        //         }
+        //     }
+        // }
 
         // stage('Apply k8s') {
         //     agent { label 'ptb-agent || nnh-agent' }
