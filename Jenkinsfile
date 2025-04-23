@@ -71,7 +71,8 @@ pipeline {
             steps {
                 script {
                     echo "Deploying ${SERVICE} to k8s cluster....."
-                    sh "helm upgrade --install --namespace=test-${LATEST_COMMIT_ID} --create-namespace ${SERVICE}-${LATEST_COMMIT_ID} -f $helmValues $helmChart --set image.repository=22127025/devops-project2 --set image.tag=${LATEST_COMMIT_ID}"
+                    //sh "helm upgrade --install --namespace=p-helm-deployment --create-namespace ${SERVICE}-${LATEST_COMMIT_ID} -f $helmValues $helmChart --set image.repository=22127025/devops-project2 --set image.tag=${LATEST_COMMIT_ID}"
+                    sh "helm upgrade --install --namespace=p-helm-deployment --set image.repository=22127025/devops-project2 --set image.tag=${LATEST_COMMIT_ID}"
                 }
             }
         }
